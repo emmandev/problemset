@@ -24,7 +24,26 @@ doAsync(input)
 //endregion 1. Asynchronous Operations
 
 //region 2. Streams
-class RandStringSource extends events.EventEmitter {}
+class RandStringSource extends events.EventEmitter {
+  regex = /[\w]+\./g
+  text = ""
+
+  constructor(stream) {
+    super()
+    stream.on("data", (data) => this.check(data))
+  }
+
+  check(text) {
+    this.text += text
+    this.text = this.text.replace(this.regex, (match) => {
+      // remove period
+      this.emit("data", match.slice(0, -1))
+
+      // replace match with empty string
+      return ""
+    })
+  }
+}
 
 let source = new RandStringSource(new RandStream())
 
