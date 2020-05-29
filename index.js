@@ -51,3 +51,36 @@ source.on("data", (data) => {
   console.log(data)
 })
 //endregion 2. Streams
+
+//region 3. Resource Pooling
+class Resource {
+  release() {}
+}
+class ResourceManager {
+  constructor(count) {}
+
+  borrow(callback) {}
+}
+
+let pool = new ResourceManager(2)
+console.log("START")
+
+let timestamp = Date.now()
+
+pool.borrow((res) => {
+  console.log("RES: 1")
+
+  setTimeout(() => {
+    res.release()
+  }, 500)
+})
+
+pool.borrow((res) => {
+  console.log("RES: 2")
+})
+
+pool.borrow((res) => {
+  console.log("RES: 3")
+  console.log("DURATION: " + (Date.now() - timestamp))
+})
+//endregion 3. Resource Pooling
