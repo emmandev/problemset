@@ -20,7 +20,7 @@ const doAsync = async (arr = []) => {
 }
 
 const input = ["A", ["B", "C", "D", "E"], "F", "G", ["H", "I"]]
-doAsync(input)
+const problem1 = () => doAsync(input)
 //endregion 1. Asynchronous Operations
 
 //region 2. Streams
@@ -45,11 +45,13 @@ class RandStringSource extends events.EventEmitter {
   }
 }
 
-let source = new RandStringSource(new RandStream())
+const problem2 = () => {
+  const source = new RandStringSource(new RandStream())
 
-source.on("data", (data) => {
-  console.log(data)
-})
+  source.on("data", (data) => {
+    console.log(data)
+  })
+}
 //endregion 2. Streams
 
 //region 3. Resource Pooling
@@ -116,25 +118,27 @@ class ResourceManager {
   }
 }
 
-let pool = new ResourceManager(2)
-console.log("START")
+const problem3 = () => {
+  let pool = new ResourceManager(2)
+  console.log("START")
 
-let timestamp = Date.now()
+  let timestamp = Date.now()
 
-pool.borrow((res) => {
-  console.log("RES: 1")
+  pool.borrow((res) => {
+    console.log("RES: 1")
 
-  setTimeout(() => {
-    res.release()
-  }, 500)
-})
+    setTimeout(() => {
+      res.release()
+    }, 500)
+  })
 
-pool.borrow((res) => {
-  console.log("RES: 2")
-})
+  pool.borrow((res) => {
+    console.log("RES: 2")
+  })
 
-pool.borrow((res) => {
-  console.log("RES: 3")
-  console.log("DURATION: " + (Date.now() - timestamp))
-})
+  pool.borrow((res) => {
+    console.log("RES: 3")
+    console.log("DURATION: " + (Date.now() - timestamp))
+  })
+}
 //endregion 3. Resource Pooling
