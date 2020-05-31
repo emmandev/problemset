@@ -2,6 +2,7 @@
 
 const { asyncOp, RandStream } = require("./lib/lib")
 const events = require("events")
+const { prompter } = require("./lib/prompter")
 
 //region 1. Asynchronous Operations
 /**
@@ -142,3 +143,9 @@ const problem3 = () => {
   })
 }
 //endregion 3. Resource Pooling
+
+prompter([
+  { name: 1, value: problem1 },
+  { name: 2, value: problem2 },
+  { name: 3, value: problem3 },
+])
