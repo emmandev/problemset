@@ -53,13 +53,67 @@ source.on("data", (data) => {
 //endregion 2. Streams
 
 //region 3. Resource Pooling
-class Resource {
-  release() {}
+class Resource extends events.EventEmitter {
+  isWorking = false
+
+  release() {
+    this.isWorking = false
+    this.emit("released")
+  }
+
+  use() {
+    this.isWorking = true
+  }
 }
 class ResourceManager {
-  constructor(count) {}
+  resources = []
+  queue = []
 
-  borrow(callback) {}
+  constructor(count) {
+    this.addResources(count)
+  }
+
+  addResources(number) {
+    for (let i = 0; i < number; i++) {
+      const resource = new Resource()
+
+      resource.on("released", () => {
+        if (this.queue.length) {
+          this.useResource(this.queue.shift(), resource)
+        }
+      })
+
+      this.resources.push(resource)
+    }
+  }
+
+  getVacantResource() {
+    return this.resources.find((resource) => !resource.isWorking)
+  }
+
+  useResource(callback, resource) {
+    resource.use()
+    callback(resource)
+  }
+
+  async borrow(callback) {
+    const resource = this.getVacantResource()
+
+    if (!resource) {
+      this.queue.push(callback)
+      console.log("NO RESOURCES AVAILABLE")
+    } else {
+      this.useResource(callback, resource)
+    }
+  }
+
+  async wait() {
+    for await (const q of this.queue) {
+      q.on("released", () => {
+        console.log("KKKK")
+      })
+    }
+  }
 }
 
 let pool = new ResourceManager(2)
