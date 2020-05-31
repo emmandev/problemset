@@ -2,6 +2,8 @@
   "name": "problemset",
   "version": "1.0.0",
   "dependencies": {
+    "commander": "^5.1.0",
+    "inquirer": "^7.1.0",
     "rand-token": "^1.0.1"
   },
   "devDependencies": {
